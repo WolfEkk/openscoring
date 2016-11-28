@@ -10,6 +10,7 @@
 
 	<groupId>org.openscoring</groupId>
 	<artifactId>openscoring-server</artifactId>
+	<version>1.2.3-SNAPSHOT</version>
 
 	<name>Openscoring Server</name>
 	<description>Command-line server application</description>
@@ -44,6 +45,10 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlet</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlets</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>

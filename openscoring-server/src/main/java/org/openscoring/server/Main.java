@@ -20,14 +20,19 @@ package org.openscoring.server;
 
 import java.io.File;
 import java.net.InetSocketAddress;
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.openscoring.client.DirectoryDeployer;
@@ -168,6 +173,15 @@ public class Main {
 		servletHandler.setContextPath(this.contextPath);
 
 		servletHandler.addServlet(new ServletHolder(jerseyServlet), "/*");
+		
+		FilterHolder corsFilter = new FilterHolder(new CrossOriginFilter());
+		corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET, POST");
+		corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With-Origin,Content-Type,Accept");
+		corsFilter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+		
+		servletHandler.addFilter(corsFilter, "/model/*", EnumSet.allOf(DispatcherType.class));
+		servletHandler.addFilter(corsFilter, "/metric/*", EnumSet.allOf(DispatcherType.class));
+		servletHandler.addFilter(corsFilter, "/*", EnumSet.allOf(DispatcherType.class));
 
 		ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
 
